@@ -1,6 +1,13 @@
 
 import { GluegunToolbox } from 'gluegun'
+import chalk from 'chalk'
 
+
+const HELP = `
+${chalk.bold('digger live')} [options]
+Options:
+  -h, --help                    Show usage information
+`
 
 module.exports = {
   name: 'live',
@@ -17,23 +24,49 @@ module.exports = {
       d
     } = toolbox.parameters.options
         // Support both short and long option variants
-        help = help || h
-        drop = drop || dp
+        help = help || h || false
+        drop = drop || dp || false
         addr = addr || d || false
+        json = json || false
+
+        let noAuto = Object.keys(toolbox.parameters.options).length;
+        // console.log(noAuto, "options")
+
+        if (help || !noAuto) {
+          if (!noAuto) {
+          print.error("No options was typed")
+        }
+          print.info(HELP)
+          return
+        }
+
+        if (help || drop || !json  ) {
+          print.error("Unknown option")
+          return
+        }
 
         let inDP = drop ? JSON.parse(drop) : false
         let UserPath = json
 
-        console.log(toolbox.parameters.options, "options")
-        // console.log(drop && inDP == true)
-        // console.log(drop || inDP == true)
+       if (typeof json !== 'string'){
+          let filesHere = toolbox.filesystem.find(`./`, { matching: './*.json' })
+          var JZ = Object.keys(filesHere).length;
+            print.info(filesHere);
+            print.info(`Found: ${JZ} JSON files to process...`);
+
+            filesHere.forEach(element => {
+            print.info(element);
+            print.info('Sendding your JSONs...')
+            conn(addr, false, filesystem.read(`${process.cwd()}/${element}`, 'json') || {})
+            });
+      }
 
     if (drop && inDP == true) {
       print.info('Dropping Database...')
       conn(addr, true)
     }
 
-    if (json) {
+    if (typeof json === 'string') {
       const MyJSON =
       filesystem.read(`${process.cwd()}/${UserPath}`, 'json') || {}
       var JSONsize = Object.keys(MyJSON).length;
