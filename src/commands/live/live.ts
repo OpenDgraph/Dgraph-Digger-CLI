@@ -29,19 +29,20 @@ module.exports = {
         // console.log(drop || inDP == true)
 
     if (drop && inDP == true) {
-      conn(addr, true)
       print.info('Dropping Database...')
+      conn(addr, true)
     }
 
     if (json) {
       const MyJSON =
       filesystem.read(`${process.cwd()}/${UserPath}`, 'json') || {}
-        var JSONsize = Object.keys(MyJSON).length;
+      var JSONsize = Object.keys(MyJSON).length;
         if (JSONsize < 1) {
-        print.error(`No JSON file please select a file with --json ${UserPath}`)
-        }
-      conn(addr, false, MyJSON)
-      print.info('Dropping Database... HA')
+          print.error(`No JSON file found please set a file with --json /yourpath/json.json`)
+          } else {
+            print.info('Sendding your JSON...')
+            conn(addr, false, MyJSON)
+          }
     }
     
     print.info('Thank you for using Dgraph!')
