@@ -3,7 +3,7 @@ import { GluegunToolbox } from 'gluegun'
 
 
 module.exports = {
-  name: 'digger',
+  name: 'live',
   run: async (toolbox: GluegunToolbox) => {
     const { filesystem, print, conn } = toolbox
     // Parse CLI parameters
