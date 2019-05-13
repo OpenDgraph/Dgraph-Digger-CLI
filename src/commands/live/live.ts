@@ -6,7 +6,11 @@ import chalk from 'chalk'
 const HELP = `
 ${chalk.bold('digger live')} [options]
 Options:
-  -h, --help                    Show usage information
+  -h, --help                    Show usage information.
+  -dp, --drop                   Dropping Database set 'true'.
+  --json                        The path to your JSON files. You can set a path to a folder or to a file.
+  --d , --addr                  Setup the Alpha connection it accepts multiple address separated by comma.
+                                e.g: localhost:9080,localhost:9081
 `
 
 module.exports = {
@@ -37,10 +41,11 @@ module.exports = {
         if (addr && typeof addr === 'string') {
           addrArray = addr.split(comma);
           addrTotal = Object.keys(addrArray).length;
+          print.info(addrArray)
         }
-        print.info(addrArray)
+
         let noAuto = Object.keys(toolbox.parameters.options).length;
-        // console.log(noAuto, "options")
+        // console.log(noAuto, "options",toolbox.parameters.options)
 
         if (help || !noAuto) {
           if (!noAuto) {
@@ -50,19 +55,21 @@ module.exports = {
           return
         }
 
-        if (help || drop || !json  ) {
-          print.error("Unknown option")
-          return
-        }
-        if (addr && typeof addr !== 'string') {
+        if (addr && typeof addr !== 'string'|| drop && typeof drop !== 'string') {
           print.error("Unknown param: addr flag can't be empty. If you need default addr just remove the flag.")
           return
         }
 
+        // if (!help ) {
+        //   print.error("Unknown option")
+        //   return
+        // }
+
+
         let inDP = drop ? JSON.parse(drop) : false
         let UserPath = json
 
-       if (typeof json !== 'string'){
+       if (json && typeof json !== 'string'){
           let filesHere = toolbox.filesystem.find(`./`, { matching: './*.json' })
           var JZ = Object.keys(filesHere).length;
             print.info(`Found: ${JZ} JSON files to process...`);
@@ -92,10 +99,10 @@ module.exports = {
             });
       }
 
-    if (drop && inDP == true) {
-      print.info('Dropping Database...')
-      conn(addr, true)
-    }
+      if (drop && inDP == true) {
+        print.info('Dropping Database...')
+        conn(addr, true)
+      }
 
     if (typeof json === 'string') {
       const MyJSON =

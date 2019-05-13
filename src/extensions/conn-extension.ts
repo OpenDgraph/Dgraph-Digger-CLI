@@ -7,7 +7,9 @@ import * as dgraph from 'dgraph-js'
 
 module.exports = (toolbox: GluegunToolbox) => {
   toolbox.conn = (addr: any, dropit: any, LiveJSON: any) => {
-    toolbox.print.info(`Starting... sending mutations to ${addr}`)
+    if (addr){
+      toolbox.print.info(`Starting... sending mutations to ${addr}`)
+    }
     const clientStub = new dgraph.DgraphClientStub(
       // addr: optional, default: "localhost:9080"
       addr ? addr : "localhost:9080",
