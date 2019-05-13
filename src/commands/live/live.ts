@@ -29,6 +29,16 @@ module.exports = {
         addr = addr || d || false
         json = json || false
 
+        let comma: string = ',';
+        let addrArray: any;
+        let addrTotal: any;
+
+        // Alterar a posição desse campo para depois de --json
+        if (addr && typeof addr === 'string') {
+          addrArray = addr.split(comma);
+          addrTotal = Object.keys(addrArray).length;
+        }
+        print.info(addrArray)
         let noAuto = Object.keys(toolbox.parameters.options).length;
         // console.log(noAuto, "options")
 
@@ -44,6 +54,10 @@ module.exports = {
           print.error("Unknown option")
           return
         }
+        if (addr && typeof addr !== 'string') {
+          print.error("Unknown param: addr flag can't be empty. If you need default addr just remove the flag.")
+          return
+        }
 
         let inDP = drop ? JSON.parse(drop) : false
         let UserPath = json
@@ -51,13 +65,30 @@ module.exports = {
        if (typeof json !== 'string'){
           let filesHere = toolbox.filesystem.find(`./`, { matching: './*.json' })
           var JZ = Object.keys(filesHere).length;
-            print.info(filesHere);
             print.info(`Found: ${JZ} JSON files to process...`);
+            print.info(filesHere);
 
-            filesHere.forEach(element => {
-            print.info(element);
+            // console.log('addrTotal', addrTotal);
+            filesHere.forEach((element, index, array) => {
+              var x = 0;
+              var turn = 1;
+              var offset = 0;
+              while (x < index) {
+                x = ++x;
+                offset = ++offset;
+                if (x == addrTotal) {
+                  offset = 0
+                  turn = ++turn
+                   continue;
+                } else if (x == addrTotal*turn){
+                  offset = 0
+                  turn = ++turn
+                }
+             }
+           //  console.log(addrArray[offset],'x', x, "offset", offset, "turn", turn, "index", index);
+
             print.info('Sendding your JSONs...')
-            conn(addr, false, filesystem.read(`${process.cwd()}/${element}`, 'json') || {})
+            conn(addrArray[offset], false, filesystem.read(`${process.cwd()}/${element}`, 'json') || {})
             });
       }
 
