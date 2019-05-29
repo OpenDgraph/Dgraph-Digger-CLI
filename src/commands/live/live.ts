@@ -27,7 +27,7 @@ module.exports = {
       addr,
       d
     } = toolbox.parameters.options
-        // Support both short and long option variants
+        // Support both short and long option letiants
         help = help || h || false
         drop = drop || dp || false
         addr = addr || d || false
@@ -71,23 +71,23 @@ module.exports = {
 
        if (json && typeof json !== 'string'){
           let filesHere = toolbox.filesystem.find(`./`, { matching: './*.json' })
-          var JZ = Object.keys(filesHere).length;
+          let JZ = Object.keys(filesHere).length;
             print.info(`Found: ${JZ} JSON files to process...`);
             print.info(filesHere);
 
             // console.log('addrTotal', addrTotal);
             filesHere.forEach((element, index, array) => {
-              var x = 0;
-              var turn = 1;
-              var offset = 0;
+              let x = 0;
+              let turn = 1;
+              let offset = 0;
               while (x < index) {
                 x = ++x;
                 offset = ++offset;
-                if (x == addrTotal) {
+                if (x === addrTotal) {
                   offset = 0
                   turn = ++turn
                    continue;
-                } else if (x == addrTotal*turn){
+                } else if (x === addrTotal*turn){
                   offset = 0
                   turn = ++turn
                 }
@@ -99,7 +99,7 @@ module.exports = {
             });
       }
 
-      if (drop && inDP == true) {
+      if (drop && inDP === true) {
         print.info('Dropping Database...')
         conn(addr, true)
       }
@@ -107,7 +107,7 @@ module.exports = {
     if (typeof json === 'string') {
       const MyJSON =
       filesystem.read(`${process.cwd()}/${UserPath}`, 'json') || {}
-      var JSONsize = Object.keys(MyJSON).length;
+      let JSONsize = Object.keys(MyJSON).length;
         if (JSONsize < 1) {
           print.error(`No JSON file found please set a file with --json /yourpath/json.json`)
           } else {

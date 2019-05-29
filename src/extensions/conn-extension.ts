@@ -25,6 +25,7 @@ module.exports = (toolbox: GluegunToolbox) => {
       try {
         const op = new dgraph.Operation();
         op.setDropAll(true);
+        // tslint:disable-next-line
         await dgraphClient.alter(op);
       } catch (e) {
           console.log(e.details)
@@ -44,9 +45,11 @@ module.exports = (toolbox: GluegunToolbox) => {
     };
 
     if (dropit) {
+      // tslint:disable-next-line
       dropAll(dgraphClient);
     }
     if (LiveJSON) {
+      // tslint:disable-next-line
       mutateJSON( dgraphClient, LiveJSON );
     }
     console.log("Done")

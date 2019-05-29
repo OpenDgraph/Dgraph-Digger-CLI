@@ -37,7 +37,7 @@ const fixParameters = (parameters, booleanOptions) => {
       throw new Error(
         `Unexpected value provided for one or more of ${optionNames}. See --help for more information.`
       )
-    } else if (unexpectedStringOptions.length == 1) {
+    } else if (unexpectedStringOptions.length === 1) {
       let params = parameters.array
       params.unshift(unexpectedStringOptions[0].value)
       return params
