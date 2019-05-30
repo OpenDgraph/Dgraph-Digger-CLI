@@ -16,7 +16,7 @@ Options:
 module.exports = {
   name: 'live',
   run: async (toolbox: GluegunToolbox) => {
-    const { filesystem, print, conn } = toolbox
+    const { filesystem, print: { info, error }, conn } = toolbox
     // Parse CLI parameters
     let {
       h,
@@ -41,7 +41,7 @@ module.exports = {
         if (addr && typeof addr === 'string') {
           addrArray = addr.split(comma);
           addrTotal = Object.keys(addrArray).length;
-          print.info(addrArray)
+          info(addrArray)
         }
 
         let noAuto = Object.keys(toolbox.parameters.options).length;
@@ -49,14 +49,14 @@ module.exports = {
 
         if (help || !noAuto) {
           if (!noAuto) {
-          print.error("No options was typed")
+          error("No options was typed")
         }
-          print.info(HELP)
+          info(HELP)
           return
         }
 
         if (addr && typeof addr !== 'string'|| drop && typeof drop !== 'string') {
-          print.error("Unknown param: addr flag can't be empty. If you need default addr just remove the flag.")
+          error("Unknown param: addr flag can't be empty. If you need default addr just remove the flag.")
           return
         }
 
@@ -72,8 +72,8 @@ module.exports = {
        if (json && typeof json !== 'string'){
           let filesHere = toolbox.filesystem.find(`./`, { matching: './*.json' })
           let JZ = Object.keys(filesHere).length;
-            print.info(`Found: ${JZ} JSON files to process...`);
-            print.info(filesHere);
+            info(`Found: ${JZ} JSON files to process...`);
+            info(filesHere);
 
             // console.log('addrTotal', addrTotal);
             filesHere.forEach((element, index, array) => {
@@ -94,13 +94,13 @@ module.exports = {
              }
            //  console.log(addrArray[offset],'x', x, "offset", offset, "turn", turn, "index", index);
 
-            print.info('Sendding your JSONs...')
+            info('Sendding your JSONs...')
             conn(addrArray[offset], false, filesystem.read(`${process.cwd()}/${element}`, 'json') || {})
             });
       }
 
       if (drop && inDP === true) {
-        print.info('Dropping Database...')
+        info('Dropping Database...')
         conn(addr, true)
       }
 
@@ -109,13 +109,13 @@ module.exports = {
       filesystem.read(`${process.cwd()}/${UserPath}`, 'json') || {}
       let JSONsize = Object.keys(MyJSON).length;
         if (JSONsize < 1) {
-          print.error(`No JSON file found please set a file with --json /yourpath/json.json`)
+          error(`No JSON file found please set a file with --json /yourpath/json.json`)
           } else {
-            print.info('Sendding your JSON...')
+            info('Sendding your JSON...')
             conn(addr, false, MyJSON)
           }
     }
     
-    print.info('Thank you for using Dgraph!')
+    info('Thank you for using Dgraph!')
   },
 }

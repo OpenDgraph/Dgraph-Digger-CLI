@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": { "*": ["types/*"] },
     "allowSyntheticDefaultImports": false,
     "experimentalDecorators": true,
     "lib": [
